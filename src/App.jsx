@@ -19,6 +19,11 @@ function App() {
     }
   }, [editar]);
 
+  const deleteBudget = (id) => {
+    const gastosActualizados = gastos.filter((gasto) => gasto.id !== id);
+    setGastos(gastosActualizados);
+  };
+
   const getBudget = (budgetObj) => {
     if (budgetObj.id) {
       //actualizar
@@ -58,7 +63,12 @@ function App() {
       {isValid && (
         <>
           <main>
-            <BudgetList gastos={gastos} editar={editar} setEditar={setEditar} />
+            <BudgetList
+              gastos={gastos}
+              editar={editar}
+              setEditar={setEditar}
+              deleteBudget={deleteBudget}
+            />
           </main>
           <div className="nuevo-gasto">
             <img
