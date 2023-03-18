@@ -1,13 +1,31 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import closeModalIcon from "../img/cerrar.svg";
 import Alert from "./Alert";
-import { generateId } from "../helpers";
 
-function Modal({ setModal, animarModal, setAnimarModal, getBudget }) {
+function Modal({
+  setModal,
+  animarModal,
+  setAnimarModal,
+  getBudget,
+  editar,
+  setEditar,
+}) {
   const [mensaje, setMensaje] = useState("");
   const [name, setName] = useState("");
   const [cantidad, setCantidad] = useState("");
   const [categoria, setCategoria] = useState("");
+  const [id, setId] = useState("");
+  const [fecha, setFecha] = useState("");
+
+  useEffect(() => {
+    if (Object.keys(editar).length > 0) {
+      setName(editar.name);
+      setCantidad(editar.cantidad);
+      setCategoria(editar.categoria);
+      setId(editar.id);
+      setFecha(editar.fecha);
+    }
+  }, [editar]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,11 +39,11 @@ function Modal({ setModal, animarModal, setAnimarModal, getBudget }) {
     }
 
     getBudget({
-      id: generateId(),
+      id,
       name,
       cantidad,
       categoria,
-      fecha: Date.now(),
+      fecha,
     });
   };
 
@@ -34,6 +52,7 @@ function Modal({ setModal, animarModal, setAnimarModal, getBudget }) {
     setTimeout(() => {
       setAnimarModal(false);
     }, 300);
+    setEditar({});
   };
 
   return (
@@ -46,7 +65,7 @@ function Modal({ setModal, animarModal, setAnimarModal, getBudget }) {
         onSubmit={handleSubmit}
         className={`formulario ${animarModal ? "animar" : ""}`}
       >
-        <legend>Nuevo Gasto</legend>
+        <legend>{editar.name ? "Editar Gasto" : "Nuevo Gasto"}</legend>
         {mensaje && <Alert mensaje={mensaje} tipo={"error"} />}
         <div className="campo">
           <label htmlFor="nombre">Nombre</label>
@@ -88,7 +107,10 @@ function Modal({ setModal, animarModal, setAnimarModal, getBudget }) {
           </select>
         </div>
 
-        <input type="submit" value="Añadir Gasto" />
+        <input
+          type="submit"
+          value={editar.name ? "Guardar Cabio" : "Añadir Gasto"}
+        />
       </form>
     </div>
   );
