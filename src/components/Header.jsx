@@ -1,12 +1,12 @@
 import React from "react";
 import NewBudget from "./NewBudget";
-
-function Header({ budget, setBudget, setIsValid, isValid }) {
+import BudgetControl from "./BudgetControl";
+function Header({ gastos, budget, setBudget, setIsValid, isValid }) {
   return (
     <header>
       <h1>Planificar Gastos</h1>
       {isValid ? (
-        <>es valido</>
+        <BudgetControl budget={budget} gastos={gastos} />
       ) : (
         <NewBudget
           budget={budget}
